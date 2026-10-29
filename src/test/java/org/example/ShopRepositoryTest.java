@@ -63,4 +63,50 @@ public class ShopRepositoryTest {
             shop.add(duplicateProduct);
         });
     }
+
+    @Test
+    void shouldFindMultipleProductsWhenSearchTermMatchesSeveral() {
+        ShopRepository shop = new ShopRepository();
+
+        shop.add(new Product(1, "Laptop Pro", 1000));
+        shop.add(new Product(2, "Laptop Air", 900));
+        shop.add(new Product(3, "Mouse", 50));
+
+        String searchTerm = "laptop"; // ищем по подстроке, регистр не важен
+        Product[] found = shop.search(searchTerm);
+
+        assertEquals(2, found.length, "Должно найтись ровно 2 продукта с 'laptop' в названии");
+        assertTrue(found[0].getTitle().toLowerCase().contains(searchTerm));
+        assertTrue(found[1].getTitle().toLowerCase().contains(searchTerm));
+    }
+
+    @Test
+    void shouldFindExactlyOneProductWhenSearchTermMatchesSingle() {
+        ShopRepository shop = new ShopRepository();
+
+        shop.add(new Product(1, "Keyboard", 70));
+        shop.add(new Product(2, "Headphones", 120));
+        shop.add(new Product(3, "Monitor Ultra", 300));
+
+        String searchTerm = "monitor";
+        Product[] found = shop.search(searchTerm);
+
+        assertEquals(1, found.length, "Должно найтись ровно 1 продукт с 'monitor' в названии");
+        assertEquals("Monitor Ultra", found[0].getTitle());
+    }
+
+    @Test
+    void shouldReturnEmptyArrayWhenNoProductsMatchSearchTerm() {
+        ShopRepository shop = new ShopRepository();
+
+        shop.add(new Product(1, "Laptop", 1000));
+        shop.add(new Product(2, "Mouse", 50));
+        shop.add(new Product(3, "Keyboard", 70));
+
+        String searchTerm = "tv"; // такого нет
+        Product[] found = shop.search(searchTerm);
+
+        assertEquals(0, found.length, "При отсутствии совпадений должен возвращаться пустой массив");
+    }
+
 }
