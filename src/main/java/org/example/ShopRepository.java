@@ -14,6 +14,11 @@ public class ShopRepository {
     }
 
     public void add(Product product){
+        for (Product existing : products) {
+            if (existing.getId() == product.getId()) {
+                throw new AlreadyExistsException("Продукт с id: " + product.getId() + " уже существует");
+            }
+        }
         products = addToArray(products, product);
     }
 
@@ -50,5 +55,9 @@ public class ShopRepository {
 
     public Product[] getProducts(){
         return products;
+    }
+
+    public int sizeProducts(){
+        return products.length;
     }
 }
