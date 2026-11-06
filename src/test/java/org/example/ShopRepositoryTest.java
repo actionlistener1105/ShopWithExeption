@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ShopRepositoryTest {
 
+
     @Test
     void shouldThrowNotFoundExceptionWhenRemovingNonExistingProduct() {
         ShopRepository shop = new ShopRepository();
@@ -57,7 +58,7 @@ public class ShopRepositoryTest {
         Product duplicateProduct = new Product(duplicateId, "Another Mouse", 39);
 
         shop.add(firstProduct);
-        
+
         assertThrows(AlreadyExistsException.class, () -> {
             shop.add(duplicateProduct);
         });
